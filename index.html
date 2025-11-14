@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Frequently Asked Questions</title>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+
+        .autocomplete-dropdown.show {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background: #ecfeff;
+        }
+
+        .autocomplete-question {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .autocomplete-category {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #ecfeff;
+            color: #40c0c2;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #40c0c2;
+            box-shadow: 0 0 0 3px rgba(64, 192, 194, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.2rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            border-color: #40c0c2;
+            background: #ecfeff;
+        }
+
+        .filter-btn.active {
+            background: #40c0c2;
+            color: white;
+            border-color: #40c0c2;
+        }
+
+        .results-info {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            padding: 0 5px;
+        }
+
+        .faq-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: #ecfeff;
+        }
+
+        .faq-question h3 {
+            font-size: 1.1rem;
+            color: #333;
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .faq-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #ecfeff;
+            color: #40c0c2;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 15px;
+            font-weight: 600;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: #40c0c2;
+            transition: transform 0.3s;
+            font-weight: 300;
+        }
+
+        .faq-item.open .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 25px 25px 25px;
+            color: #555;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 1000px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #374151;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            opacity: 0.8;
+        }
+
+        mark {
+            background: #ccf5f6;
+            padding: 2px 0;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .search-section {
+                padding: 20px;
+            }
+
+            .faq-question {
+                padding: 15px 20px;
+            }
+
+            .faq-question h3 {
+                font-size: 1rem;
+            }
+
+            .faq-category {
+                display: block;
+                margin-bottom: 8px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Frequently Asked Questions</h1>
+            <p>Find answers to common questions</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="Search for questions..."
+                    autocomplete="off"
+                >
+                <span class="search-icon">🔍</span>
+                <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+            </div>
+            <div class="filters" id="filters"></div>
+        </div>
+
+        <div id="resultsInfo" class="results-info"></div>
+        <div id="faqList" class="faq-list"></div>
+    </div>
+
+    <script>
+        // ==========================================
+        // FAQ DATA - UPDATE THIS SECTION
+        // ==========================================
+        const faqData = [
+            {
+                question: "What is PlainID?",
+                answer: "PlainID is the market-leading authorization platform that helps enterprises discover, manage, and authorize access control policies across their entire technology environment. Powered by Policy-Based Access Control (PBAC), PlainID provides centralized policy management with distributed enforcement capabilities for applications, APIs, microservices, and data platforms.",
+                category: "Platform Overview",
+                tags: ["plainid", "authorization", "platform", "pbac"]
+            },
+            {
+                question: "What is PBAC (Policy-Based Access Control)?",
+                answer: "PBAC is an authorization model that centralizes access control through policies. It combines the strengths of Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC), offering both fine-grained and coarse-grained authorization. PBAC enables business owners to create authorization policies using an intuitive interface without writing code, making access decisions based on user attributes, resource characteristics, and contextual factors.",
+                category: "Platform Overview",
+                tags: ["pbac", "access control", "authorization model", "policies"]
+            },
+            {
+                question: "How is PBAC different from RBAC and ABAC?",
+                answer: "While RBAC relies solely on user roles and ABAC uses attributes broadly, PBAC offers a more manageable implementation with centralized policy management. PBAC focuses on policies as the central method of access control, providing greater flexibility and granularity than RBAC while being more streamlined than ABAC. It's particularly suitable for complex, dynamic systems where access needs change frequently based on user context and business policies.",
+                category: "Platform Overview",
+                tags: ["pbac", "rbac", "abac", "comparison", "access control"]
+            },
+            {
+                question: "What are PlainID Authorizers?",
+                answer: "PlainID Authorizers are pre-built, out-of-the-box integrations that enable authorization enforcement across your technology stack. They provide SDKs and ready-to-use connections for APIs, microservices, applications, and data platforms including Snowflake, Google BigQuery, Denodo, API Gateways (AWS, Apigee), Istio, and more. Authorizers eliminate the need to code custom access policies from scratch.",
+                category: "Features",
+                tags: ["authorizers", "integrations", "enforcement", "sdk"]
+            },
+            {
+                question: "What is Policy 360?",
+                answer: "Policy 360 is PlainID's comprehensive policy management framework that provides a 360-degree view of every access policy throughout its entire lifecycle. It consolidates all policy logic, metadata, dependencies, and lifecycle steps—from authoring and editing through approval, deployment, audit, and traceability—into a single, intuitive interface. This enables teams to discover, manage, and monitor access policies with complete visibility and coordination.",
+                category: "Features",
+                tags: ["policy 360", "policy management", "lifecycle", "visibility"]
+            },
+            {
+                question: "What deployment options does PlainID offer?",
+                answer: "PlainID offers flexible deployment options to fit your environment: Full SaaS (where PlainID manages the entire platform including centralized management and runtime layers), Hybrid deployment, and On-premises deployment. All deployment options maintain the same foundation of the PlainID Authorization Platform and Policy-Based Access Control (PBAC) capabilities.",
+                category: "Deployment",
+                tags: ["deployment", "saas", "hybrid", "on-premises", "cloud"]
+            },
+            {
+                question: "How does PlainID handle data authorization?",
+                answer: "PlainID provides dynamic, fine-grained data authorization through query modification and data filtering. The platform integrates with data services via Authorizers (sidecars, plugins, or SDKs) to enforce row-level, column-level, and cell-level access controls. When a user queries data, PlainID's Policy Decision Point calculates the authorization resolution, which is then translated into data filtering clauses that modify the query to return only permitted data based on identity context and data policies.",
+                category: "Data Security",
+                tags: ["data authorization", "data filtering", "row level security", "column masking"]
+            },
+            {
+                question: "What is the Visual Policy Map?",
+                answer: "The Visual Policy Map is a graphical representation tool that helps administrators visualize policy connections and understand how policies relate to identities, conditions, permissions, asset types, and applications. It enables policy builders to see the relationships between who can access what and when, improving the accuracy and efficacy of policy design before policies go live. This visual approach makes it easier to fine-tune policies and understand their impact.",
+                category: "Features",
+                tags: ["visual policy map", "policy visualization", "policy design", "graphical interface"]
+            },
+            {
+                question: "How does PlainID support Zero Trust architecture?",
+                answer: "PlainID enables Zero Trust through identity-first security with continuous, real-time authorization controls. The platform provides identity-aware access decisions that adapt dynamically to user context and business requirements throughout the user journey. By centralizing policy management while maintaining distributed enforcement, PlainID ensures that access is continuously verified and granted on a least-privilege basis across all identity types—workforce, customers, partners, and system accounts.",
+                category: "Security",
+                tags: ["zero trust", "identity-first security", "continuous authorization", "least privilege"]
+            },
+            {
+                question: "Can PlainID discover existing authorization policies?",
+                answer: "Yes. PlainID can automatically discover and import existing authorization policies from your current systems and SaaS applications including Power BI, Zscaler, Snowflake, Databricks, and more. The Discovery process pulls existing policies into PlainID, maps discovered objects to policy elements, and displays them in the PlainID dashboard in a standardized way. This provides complete visibility into your policy fabric without requiring you to rewrite existing policies.",
+                category: "Features",
+                tags: ["policy discovery", "import policies", "policy migration", "existing policies"]
+            },
+            {
+                question: "What are the main benefits of using PlainID?",
+                answer: "PlainID provides centralized visibility and control over all access policies, reduces complexity by eliminating role explosion common in RBAC systems, enables business owners to manage authorization without technical knowledge, supports dynamic and real-time authorization decisions, ensures compliance through streamlined governance workflows, integrates seamlessly with existing IAM solutions, and accelerates deployment with ready-to-use Authorizers. Organizations can reduce IT costs significantly while strengthening their security posture.",
+                category: "Benefits",
+                tags: ["benefits", "advantages", "value", "roi"]
+            },
+            {
+                question: "How does PlainID integrate with existing IAM systems?",
+                answer: "PlainID works as a standalone authorization layer that integrates with third-party identity providers and existing IAM solutions, both on-premises and in the cloud. The platform acts as a master policy layer above applications and enforcement points, reducing the complexity of scaling IAM systems. PlainID connects trusted identities with authorization policies throughout the user journey, complementing and enhancing your existing Identity and Access Management infrastructure rather than replacing it.",
+                category: "Integration",
+                tags: ["iam integration", "identity providers", "existing systems", "compatibility"]
+            },
+            {
+                question: "What is Authorization-as-a-Service?",
+                answer: "Authorization-as-a-Service is PlainID's cloud-first, SaaS-enabled platform delivery model designed to solve enterprise challenges associated with advanced access control. It provides centralized policy management with distributed enforcement at scale, architected to meet the performance demands of the largest global companies. With Authorization-as-a-Service, organizations can accelerate access control rollout, reduce maintenance overhead, and ensure consistent policy enforcement across their entire digital landscape.",
+                category: "Platform Overview",
+                tags: ["authorization as a service", "saas", "cloud platform", "aaas"]
+            },
+            {
+                question: "Does PlainID support policy approval workflows?",
+                answer: "Yes. PlainID includes approval workflows to streamline policy governance. Policies can be managed through creation, approval, deployment, and audit processes within one intuitive interface. PlainID also supports Policy-as-Code, allowing you to integrate policy workflows into existing CI/CD pipelines. This ensures that policies remain effective, aligned with auditing requirements, and meet governance standards throughout their lifecycle.",
+                category: "Governance",
+                tags: ["approval workflows", "policy governance", "policy as code", "ci cd"]
+            },
+            {
+                question: "Can PlainID handle AI and agentic AI authorization?",
+                answer: "Yes. PlainID recently introduced Policy Management for Agentic AI, extending AI security with identity-aware, policy-based access control. The platform enables organizations to authorize access control policies across the full workflow of agentic AI systems, ensuring that AI agents operate within defined authorization boundaries. This unified approach minimizes the risk of data leakage and ensures continuous compliance in AI-driven enterprises.",
+                category: "AI & Innovation",
+                tags: ["ai authorization", "agentic ai", "ai security", "machine learning"]
+            }
+        ];
+
+        // ==========================================
+        // APPLICATION LOGIC - NO NEED TO EDIT BELOW
+        // ==========================================
+
+        let fuse;
+        let currentCategory = 'All';
+
+        // Initialize Fuse.js for fuzzy search
+        function initializeFuse() {
+            fuse = new Fuse(faqData, {
+                keys: ['question', 'answer', 'tags'],
+                threshold: 0.4,
+                includeScore: true,
+                includeMatches: true
+            });
+        }
+
+        // Get unique categories
+        function getCategories() {
+            const categories = ['All', ...new Set(faqData.map(faq => faq.category))];
+            return categories;
+        }
+
+        // Render category filters
+        function renderFilters() {
+            const filtersContainer = document.getElementById('filters');
+            const categories = getCategories();
+            
+            filtersContainer.innerHTML = categories.map(category => 
+                `<button class="filter-btn ${category === currentCategory ? 'active' : ''}" 
+                         onclick="filterByCategory('${category}')">
+                    ${category}
+                </button>`
+            ).join('');
+        }
+
+        // Filter by category
+        function filterByCategory(category) {
+            currentCategory = category;
+            renderFilters();
+            performSearch();
+        }
+
+        // Highlight search terms
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+
+        // Render FAQ items
+        function renderFAQs(faqs, searchTerm = '') {
+            const faqList = document.getElementById('faqList');
+            const resultsInfo = document.getElementById('resultsInfo');
+
+            if (faqs.length === 0) {
+                faqList.innerHTML = '';
+                resultsInfo.innerHTML = '';
+                document.body.innerHTML += `
+                    <div class="no-results">
+                        <h3>No results found</h3>
+                        <p>Try adjusting your search terms or filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Remove any existing no-results message
+            const noResults = document.querySelector('.no-results');
+            if (noResults) noResults.remove();
+
+            resultsInfo.textContent = `Showing ${faqs.length} result${faqs.length !== 1 ? 's' : ''}`;
+
+            faqList.innerHTML = faqs.map((faq, index) => `
+                <div class="faq-item" id="faq-${index}">
+                    <div class="faq-question" onclick="toggleFAQ(${index})">
+                        <div style="flex: 1;">
+                            <span class="faq-category">${faq.category}</span>
+                            <h3>${highlightText(faq.question, searchTerm)}</h3>
+                        </div>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            ${highlightText(faq.answer, searchTerm)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Toggle FAQ open/close
+        function toggleFAQ(index) {
+            const faqItem = document.getElementById(`faq-${index}`);
+            faqItem.classList.toggle('open');
+        }
+
+        // Perform search
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            let results;
+
+            if (searchTerm) {
+                // Use Fuse.js for fuzzy search
+                const fuseResults = fuse.search(searchTerm);
+                results = fuseResults.map(result => result.item);
+            } else {
+                // No search term, show all
+                results = faqData;
+            }
+
+            // Filter by category
+            if (currentCategory !== 'All') {
+                results = results.filter(faq => faq.category === currentCategory);
+            }
+
+            renderFAQs(results, searchTerm);
+        }
+
+        // Debounce function for search
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // ==========================================
+        // AUTOCOMPLETE FUNCTIONALITY
+        // ==========================================
+        let autocompleteIndex = -1;
+        let autocompleteResults = [];
+
+        // Show autocomplete suggestions
+        function showAutocomplete(searchTerm) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            
+            if (!searchTerm.trim()) {
+                dropdown.classList.remove('show');
+                autocompleteResults = [];
+                return;
+            }
+
+            // Get top 5 matching FAQs
+            const fuseResults = fuse.search(searchTerm);
+            autocompleteResults = fuseResults.slice(0, 5).map(result => result.item);
+
+            if (autocompleteResults.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            // Render autocomplete items
+            dropdown.innerHTML = autocompleteResults.map((faq, index) => `
+                <div class="autocomplete-item" data-index="${index}" onclick="selectAutocomplete(${index})">
+                    <div class="autocomplete-question">${highlightText(faq.question, searchTerm)}</div>
+                    <span class="autocomplete-category">${faq.category}</span>
+                </div>
+            `).join('');
+
+            dropdown.classList.add('show');
+            autocompleteIndex = -1;
+        }
+
+        // Select an autocomplete item
+        function selectAutocomplete(index) {
+            const selectedFAQ = autocompleteResults[index];
+            const searchInput = document.getElementById('searchInput');
+            
+            // Set search to the question
+            searchInput.value = selectedFAQ.question;
+            
+            // Hide dropdown
+            document.getElementById('autocompleteDropdown').classList.remove('show');
+            
+            // Perform search
+            performSearch();
+            
+            // Find and open the FAQ
+            const allFAQs = currentCategory === 'All' 
+                ? faqData 
+                : faqData.filter(faq => faq.category === currentCategory);
+            
+            const faqIndex = allFAQs.findIndex(faq => faq.question === selectedFAQ.question);
+            
+            if (faqIndex !== -1) {
+                // Scroll to and open the FAQ
+                setTimeout(() => {
+                    const faqElement = document.getElementById(`faq-${faqIndex}`);
+                    if (faqElement) {
+                        faqElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        faqElement.classList.add('open');
+                    }
+                }, 100);
+            }
+        }
+
+        // Handle keyboard navigation in autocomplete
+        function handleAutocompleteKeyboard(e) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            
+            if (!dropdown.classList.contains('show')) return;
+
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            
+            switch(e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    autocompleteIndex = Math.min(autocompleteIndex + 1, items.length - 1);
+                    updateAutocompleteSelection(items);
+                    break;
+                    
+                case 'ArrowUp':
+                    e.preventDefault();
+                    autocompleteIndex = Math.max(autocompleteIndex - 1, -1);
+                    updateAutocompleteSelection(items);
+                    break;
+                    
+                case 'Enter':
+                    e.preventDefault();
+                    if (autocompleteIndex >= 0) {
+                        selectAutocomplete(autocompleteIndex);
+                    }
+                    break;
+                    
+                case 'Escape':
+                    dropdown.classList.remove('show');
+                    autocompleteIndex = -1;
+                    break;
+            }
+        }
+
+        // Update visual selection in autocomplete
+        function updateAutocompleteSelection(items) {
+            items.forEach((item, index) => {
+                if (index === autocompleteIndex) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        // Close autocomplete when clicking outside
+        function handleClickOutside(e) {
+            const searchBox = document.querySelector('.search-box');
+            const dropdown = document.getElementById('autocompleteDropdown');
+            
+            if (!searchBox.contains(e.target)) {
+                dropdown.classList.remove('show');
+                autocompleteIndex = -1;
+            }
+        }
+
+        // Initialize the app
+        function init() {
+            initializeFuse();
+            renderFilters();
+            renderFAQs(faqData);
+
+            // Add search listener with debounce for main search
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const value = e.target.value;
+                showAutocomplete(value);
+                debounce(performSearch, 300)();
+            });
+
+            // Add keyboard navigation for autocomplete
+            searchInput.addEventListener('keydown', handleAutocompleteKeyboard);
+
+            // Close autocomplete when clicking outside
+            document.addEventListener('click', handleClickOutside);
+        }
+
+        // Make functions available globally
+        window.filterByCategory = filterByCategory;
+        window.toggleFAQ = toggleFAQ;
+        window.selectAutocomplete = selectAutocomplete;
+
+        // Start the app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
