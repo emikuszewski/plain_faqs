@@ -480,6 +480,30 @@
                 answer: "No.",
                 category: "Security",
                 tags: ["fedramp", "certification", "compliance", "federal"]
+            },
+            {
+                question: "What's the latency for authorization decisions?",
+                answer: "PDPs make decisions in single-digit milliseconds. They cache policy locally and make decisions without network calls back to the PAP.",
+                category: "Performance",
+                tags: ["latency", "performance", "pdp", "milliseconds", "cache"]
+            },
+            {
+                question: "Where do the PDPs run?",
+                answer: "PDPs run in your infrastructure—typically as containers on Kubernetes. They should be deployed as close to your applications as possible for lowest latency.",
+                category: "Deployment",
+                tags: ["pdp", "kubernetes", "containers", "infrastructure", "deployment"]
+            },
+            {
+                question: "How do applications call PlainID?",
+                answer: "Via REST API, SDK (Java, .NET, Spring Boot), or through Authorizers that integrate with API gateways, databases, and other systems.",
+                category: "Integration",
+                tags: ["api", "sdk", "java", "dotnet", "spring boot", "rest", "authorizers"]
+            },
+            {
+                question: "Can we separate different applications?",
+                answer: "Yes, using Environments and Workspaces. Each can have different administrators and policies while sharing the same tenant.",
+                category: "Multi-tenancy",
+                tags: ["multi-tenancy", "environments", "workspaces", "separation", "tenant"]
             }
         ];
 
