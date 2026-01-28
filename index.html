@@ -535,6 +535,12 @@
                 answer: "PlainID and Apache Ranger serve complementary roles in enterprise data security. Organizations often use both together for comprehensive coverage:<ul><li><strong>Identity handling:</strong> PlainID uses the actual logged-in user identity; Ranger uses application or service account users</li><li><strong>Policy approach:</strong> PlainID enables one policy for scenarios like 'user can access own country'; Ranger requires separate rules per country or group</li><li><strong>Attribute sources:</strong> PlainID can leverage user attributes from external sources through PIPs; Ranger is limited to user, group, and role</li><li><strong>Data classification:</strong> PlainID supports data element classification such as PII and country; Ranger has limited classification support</li><li><strong>Implementation level:</strong> PlainID is recommended for application-level enforcement; Ranger excels at data-level implementation within the Hadoop ecosystem</li></ul>Many enterprises deploy Ranger for native Hadoop data-layer security while using PlainID for application-level authorization and centralized policy management across the broader technology stack.",
                 category: "Comparison",
                 tags: ["apache ranger", "ranger", "comparison", "hadoop", "big data", "data security", "better together"]
+            },
+            {
+                question: "What Identity Providers (IDPs) does PlainID support?",
+                answer: "PlainID supports any Identity Provider that implements standard protocols—specifically SAML and OIDC. Rather than maintaining a list of specific vendor integrations, PlainID's protocol-based approach means it works with any compliant IDP, including Okta, Entra ID (Azure AD), Ping Identity, Auth0, and others.",
+                category: "Integration",
+                tags: ["idp", "identity provider", "saml", "oidc", "okta", "entra id", "azure ad", "ping", "auth0", "sso"]
             }
         ];
 
