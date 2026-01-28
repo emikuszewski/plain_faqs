@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-01-28T22:32:24+0000",
-  "lastCommitHash": "10a574389a1155b54e3b93418ee3f005000e8bca",
-  "lastCommitMessage": "Add new FAQ entry for Identity Providers supported\n",
+  "lastUpdated": "2026-01-28T22:38:32+0000",
+  "lastCommitHash": "08d04764ecb455ad03f60dcc3888783fa8951816",
+  "lastCommitMessage": "Add FAQ entries for IDP support and policy creation\n",
   "branch": "main"
 }
