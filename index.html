@@ -541,6 +541,12 @@
                 answer: "PlainID supports any Identity Provider that implements standard protocols—specifically SAML and OIDC. Rather than maintaining a list of specific vendor integrations, PlainID's protocol-based approach means it works with any compliant IDP, including Okta, Entra ID (Azure AD), Ping Identity, Auth0, and others.",
                 category: "Integration",
                 tags: ["idp", "identity provider", "saml", "oidc", "okta", "entra id", "azure ad", "ping", "auth0", "sso"]
+            },
+            {
+                question: "Do I need to create separate policies for each country or attribute value?",
+                answer: "No. PlainID supports dynamic attribute matching, allowing you to create a single policy where a user attribute matches a row attribute. For example, instead of writing separate rules for Singapore, USA, UK, and every other country, you define one policy stating 'user country must match row country.' PlainID evaluates this dynamically at decision time, dramatically simplifying policy management.",
+                category: "Features",
+                tags: ["attribute matching", "row level security", "dynamic policy", "data filtering", "country", "user attributes"]
             }
         ];
 
