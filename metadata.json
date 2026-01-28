@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-01-28T22:25:45+0000",
-  "lastCommitHash": "eb6eb4934578735e0e83c53d35a554cc3be2cf51",
-  "lastCommitMessage": "Add FAQ styling and new FAQ entries\n",
+  "lastUpdated": "2026-01-28T22:32:24+0000",
+  "lastCommitHash": "10a574389a1155b54e3b93418ee3f005000e8bca",
+  "lastCommitMessage": "Add new FAQ entry for Identity Providers supported\n",
   "branch": "main"
 }
