@@ -239,6 +239,19 @@
             font-size: 0.95rem;
         }
 
+        .faq-answer-content ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .faq-answer-content li {
+            margin-bottom: 10px;
+        }
+
+        .faq-answer-content strong {
+            color: #333;
+        }
+
         .faq-item.open .faq-answer {
             max-height: 1000px;
         }
@@ -504,6 +517,24 @@
                 answer: "Yes, using Environments and Workspaces. Each can have different administrators and policies while sharing the same tenant.",
                 category: "Multi-tenancy",
                 tags: ["multi-tenancy", "environments", "workspaces", "separation", "tenant"]
+            },
+            {
+                question: "What framework integrations does PlainID offer?",
+                answer: "PlainID provides integrations for popular frameworks and data platforms. Spring Boot offers zero-code integration—simply include the library in your pom file with no application changes required. Trino has a native plugin available. Kafka integration is also available. Iceberg is not currently supported.",
+                category: "Integration",
+                tags: ["spring boot", "trino", "kafka", "iceberg", "framework", "pom", "java", "data platforms"]
+            },
+            {
+                question: "What are Policy Information Points (PIPs)?",
+                answer: "Policy Information Points (PIPs) allow PlainID to reach out to third-party data sources to retrieve user attributes at decision time. This enables dynamic authorization based on real-time data from HR systems, Entra ID (Azure AD), and virtually any external data source you can imagine. PIPs enrich authorization decisions with contextual information beyond what's stored locally.",
+                category: "Features",
+                tags: ["pip", "policy information point", "attributes", "entra id", "azure ad", "hr systems", "third-party", "data sources"]
+            },
+            {
+                question: "How does PlainID compare to Apache Ranger?",
+                answer: "PlainID and Apache Ranger serve complementary roles in enterprise data security. Organizations often use both together for comprehensive coverage:<ul><li><strong>Identity handling:</strong> PlainID uses the actual logged-in user identity; Ranger uses application or service account users</li><li><strong>Policy approach:</strong> PlainID enables one policy for scenarios like 'user can access own country'; Ranger requires separate rules per country or group</li><li><strong>Attribute sources:</strong> PlainID can leverage user attributes from external sources through PIPs; Ranger is limited to user, group, and role</li><li><strong>Data classification:</strong> PlainID supports data element classification such as PII and country; Ranger has limited classification support</li><li><strong>Implementation level:</strong> PlainID is recommended for application-level enforcement; Ranger excels at data-level implementation within the Hadoop ecosystem</li></ul>Many enterprises deploy Ranger for native Hadoop data-layer security while using PlainID for application-level authorization and centralized policy management across the broader technology stack.",
+                category: "Comparison",
+                tags: ["apache ranger", "ranger", "comparison", "hadoop", "big data", "data security", "better together"]
             }
         ];
 
