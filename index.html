@@ -547,6 +547,12 @@
                 answer: "No. PlainID supports dynamic attribute matching, allowing you to create a single policy where a user attribute matches a row attribute. For example, instead of writing separate rules for Singapore, USA, UK, and every other country, you define one policy stating 'user country must match row country.' PlainID evaluates this dynamically at decision time, dramatically simplifying policy management.",
                 category: "Features",
                 tags: ["attribute matching", "row level security", "dynamic policy", "data filtering", "country", "user attributes"]
+            },
+            {
+                question: "Does PlainID support X.509 certificates?",
+                answer: "Yes. X.509 certificates can be leveraged in several places across the PlainID Platform. For Tenant/IDP authentication, PlainID supports the 'JWT signed as private key' client authentication method (private_key_jwt), which is typically backed by an X.509 certificate. For runtime authorization flows fronted by mTLS-capable gateways such as Apigee, Envoy, or Istio, attributes from a presented client certificate—such as the Subject DN, CN, or SAN—can be passed to the PDP as identity context for policy evaluation. For specific certificate-based integration use cases, contact PlainID Support.",
+                category: "Integration",
+                tags: ["x.509", "x509", "certificates", "mtls", "tls", "client certificate", "pki", "private_key_jwt", "subject dn"]
             }
         ];
 
