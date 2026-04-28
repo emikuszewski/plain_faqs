@@ -553,6 +553,18 @@
                 answer: "Yes. X.509 certificates can be leveraged in several places across the PlainID Platform. For Tenant/IDP authentication, PlainID supports the 'JWT signed as private key' client authentication method (private_key_jwt), which is typically backed by an X.509 certificate. For runtime authorization flows fronted by mTLS-capable gateways such as Apigee, Envoy, or Istio, attributes from a presented client certificate—such as the Subject DN, CN, or SAN—can be passed to the PDP as identity context for policy evaluation. For specific certificate-based integration use cases, contact PlainID Support.",
                 category: "Integration",
                 tags: ["x.509", "x509", "certificates", "mtls", "tls", "client certificate", "pki", "private_key_jwt", "subject dn"]
+            },
+            {
+                question: "Does PlainID support SOAP APIs?",
+                answer: "No. PlainID does not support SOAP APIs. The Platform is designed around REST-based authorization patterns—API Access Authorizers integrate with REST API gateways, proxies, and service meshes (such as Apigee, AWS API Gateway, Azure API Management, Envoy, and Istio) to intercept REST requests and dynamically evaluate authorization decisions. If you have a SOAP-based service that needs authorization enforcement, contact PlainID to discuss alternative integration patterns such as SDK-based enforcement at the application layer.",
+                category: "Integration",
+                tags: ["soap", "web services", "xml", "rest", "api", "wsdl", "legacy"]
+            },
+            {
+                question: "Does PlainID support Amazon API Gateway?",
+                answer: "Yes, PlainID supports Amazon API Gateway as part of the API Access Authorization pattern. However, the integration is not fully out-of-the-box—it requires direct involvement from PlainID, as some customization is needed to fit the integration to your specific environment and use case. If you're planning to enforce authorization at the Amazon API Gateway layer, engage PlainID early to scope the integration work and align on the required customization for your deployment.",
+                category: "Integration",
+                tags: ["amazon api gateway", "aws", "api gateway", "amazon", "customization", "authorizer", "rest"]
             }
         ];
 
