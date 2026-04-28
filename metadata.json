@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-04-28T13:42:21+0000",
-  "lastCommitHash": "4f3d8f3cbc135a906e3ad4e688a5986c811f6143",
-  "lastCommitMessage": "Update PlainID support answer to focus on OIDC\n",
+  "lastUpdated": "2026-04-28T14:54:35+0000",
+  "lastCommitHash": "f8c37c2b47f8672d78fff82bc659dee7e1abe536",
+  "lastCommitMessage": "Add FAQ entry for X.509 certificate support\n",
   "branch": "main"
 }
